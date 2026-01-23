@@ -13,9 +13,9 @@ import { siteConfig } from "@/data/site";
 const featuredProjects = projects.filter((project) => project.featured).slice(0, 3);
 
 const focusAreas = [
-  "Data products with delightful user experiences",
-  "LLM copilots that augment domain specialists",
-  "Robust MLOps pipelines with measurable ROI",
+  "Full-stack products",
+  "Web + mobile",
+  "AI/ML journey",
 ];
 
 export function HomeContent() {
@@ -30,14 +30,14 @@ export function HomeContent() {
         >
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            {siteConfig.title}
+            AI & Data Science Explorer
           </div>
           <div className="space-y-6 text-balance">
             <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
-              {siteConfig.tagline}
+              Building. Shipping. Improving. 🚀
             </h1>
             <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
-              Applied AI & Full-Stack Developer building production-ready platforms.
+              Applied AI student at VILNIUS TECH. I ship full-stack apps with clean UI, scalable backend flows, and real-world features — with a growing foundation in AI/ML.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
