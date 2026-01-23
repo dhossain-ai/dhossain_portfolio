@@ -10,21 +10,21 @@ import { timeline } from "@/data/timeline";
 const highlights = [
   {
     icon: Target,
-    title: "Applied AI product strategy",
+    title: "Product-ready builds",
     description:
-      "Translate ambiguous business goals into grounded ML tactics and measurable outcomes.",
+      "Shipping web platforms, admin dashboards, and backend logic end-to-end.",
   },
   {
     icon: Users,
-    title: "Cross-disciplinary leadership",
+    title: "Web + Android",
     description:
-      "Partner with design, GTM, and engineering to ship lovable products that scale.",
+      "Modern web experiences + Flutter apps designed for real usage.",
   },
   {
     icon: GraduationCap,
-    title: "Researcher mindset",
+    title: "AI-curious mindset",
     description:
-      "Bring academic rigor and curiosity to experimentation while keeping feedback loops tight.",
+      "Exploring ML foundations with Python and applying learning through projects.",
   },
 ];
 
@@ -33,8 +33,10 @@ export function AboutContent() {
     <div className="space-y-16">
       <SectionHeader
         eyebrow="About"
-        title="Curious, pragmatic, and tuned for impact"
-        description="I build production-ready web and mobile platforms with a strong focus on real-world constraints, scalability, and clean user experience. My work spans full-stack web applications, admin dashboards, and native mobile apps backed by shared cloud infrastructure."
+        title="Curious by nature. Builder by choice."
+        description="Applied AI student building full-stack web and Android apps.
+I care about clean interfaces, scalable backend flows, and real features users need.
+Currently growing into AI/ML with Python through learning and experimentation."
       />
 
       <div className="grid gap-6 sm:grid-cols-3">
