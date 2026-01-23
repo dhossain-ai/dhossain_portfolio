@@ -22,8 +22,12 @@ export function TimelineCard({ item }: TimelineCardProps) {
     >
       <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
         <span>{item.date}</span>
-        <span className="text-muted-foreground/60">-</span>
-        <span>{item.organization}</span>
+        {item.organization && (
+          <>
+            <span className="text-muted-foreground/60">-</span>
+            <span>{item.organization}</span>
+          </>
+        )}
       </div>
       <div className="mt-3 flex items-center justify-between gap-3">
         <h3 className="text-xl font-semibold text-foreground">{item.title}</h3>
@@ -32,7 +36,7 @@ export function TimelineCard({ item }: TimelineCardProps) {
           {item.location}
         </span>
       </div>
-      <p className="mt-3 text-sm leading-6 text-muted-foreground">
+      <p className="mt-3 whitespace-pre-line text-sm leading-6 text-muted-foreground">
         {item.description}
       </p>
     </motion.article>
