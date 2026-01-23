@@ -26,7 +26,9 @@ export function ProjectCard({ project, layoutId }: ProjectCardProps) {
       viewport={{ once: true, amount: 0.4 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
     >
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
+      <Link href={`/projects/${project.slug}`} className="absolute inset-0 z-0 rounded-3xl focus:outline-none focus:ring-2 focus:ring-primary/50" aria-label={`View ${project.title}`} />
+
+      <div className="relative z-10 flex items-center justify-between text-xs text-muted-foreground">
         <span className="font-medium uppercase tracking-[0.2em]">
           {project.year}
         </span>
@@ -45,7 +47,7 @@ export function ProjectCard({ project, layoutId }: ProjectCardProps) {
           )}
         </div>
       </div>
-      <div className="mt-4 space-y-3">
+      <div className="relative z-10 mt-4 space-y-3">
         <h3 className="text-2xl font-semibold text-foreground">
           {project.title}
         </h3>
@@ -53,12 +55,12 @@ export function ProjectCard({ project, layoutId }: ProjectCardProps) {
           {project.description}
         </p>
       </div>
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="relative z-10 mt-4 flex flex-wrap gap-2">
         {project.tech.map((item) => (
           <TechBadge key={item} label={item} />
         ))}
       </div>
-      <div className="mt-6 flex flex-wrap gap-3 pt-4">
+      <div className="relative z-20 mt-6 flex flex-wrap gap-3 pt-4">
         {project.links.map((link) => {
           const Icon = getIconForLabel(link.label);
           const isPrimary = link.kind === "primary";
