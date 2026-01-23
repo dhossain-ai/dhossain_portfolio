@@ -13,16 +13,39 @@ export type Project = {
   links: ProjectLink[];
   featured?: boolean;
   beta?: boolean;
+  // New Case Study Fields
+  tagline: string;
+  statusBadge: string;
+  quickFacts: {
+    role: string;
+    type: string;
+    location?: string;
+    usage?: string;
+    note?: string;
+  };
+  whatIDid: string[];
+  keyFeatures: string[];
+  challengesAndLearnings: string[];
 };
 
 export const projects: Project[] = [
   {
+    slug: "lexnova",
     title: "LexNova Legal Platform",
+    tagline: "Web platform + admin dashboard + Android app for legal services",
+    statusBadge: "Beta",
     description:
-      "A production-ready legal services platform consisting of a public website, admin dashboard, and native Android application. The system supports legal service listings, blog publishing, lead capture, appointment requests, and centralized admin management using a shared Supabase backend.",
+      "A modern legal services platform showcasing service pages, blog content, enquiries, and an admin workflow.",
     year: 2024,
-    tech: ["Next.js", "TypeScript", "Supabase", "Flutter", "Dart", "Vercel"],
-    slug: "lexnova-legal-platform",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "Supabase",
+      "Tailwind CSS",
+      "Flutter",
+      "Cloudinary",
+      "Vercel",
+    ],
     links: [
       {
         label: "Live",
@@ -36,41 +59,80 @@ export const projects: Project[] = [
       },
     ],
     featured: true,
+    beta: true,
+    quickFacts: {
+      role: "Solo Developer",
+      type: "Web + Admin + Mobile",
+      note: "Demo product for legal firms (showcase)",
+    },
+    whatIDid: [
+      "Built responsive web UI with premium layout and content structure",
+      "Implemented admin flows and backend integration",
+      "Designed mobile app experience in Flutter for Android",
+    ],
+    keyFeatures: [
+      "Role-based access flow (admin/user)",
+      "Services pages + blog/knowledge content",
+      "Enquiry/contact capture",
+      "Media uploads and content updates",
+      "Mobile-friendly UX",
+      "Deployment-ready setup",
+    ],
+    challengesAndLearnings: [
+      "Building consistent UI across web + mobile",
+      "Structuring content and admin workflows",
+      "Deployment + environment configuration",
+      "Improving reliability through iteration and feedback",
+    ],
   },
   {
-    title: "LexNova – Android App (Beta)",
+    slug: "edufriends-global",
+    title: "EduFriends Global",
+    tagline: "Multi-role education consultancy platform (web + Android)",
+    statusBadge: "Live",
     description:
-      "A native Android application built with Flutter and Dart for the LexNova Legal platform. It shares the same Supabase backend as the web system and is currently in closed testing (beta) prior to public release.",
-    year: 2024,
-    tech: ["Flutter", "Dart", "Supabase"],
-    slug: "lexnova-android-beta",
+      "An education consultancy platform with multiple user roles and real usage, built for student support and application workflows.",
+    year: 2021,
+    tech: ["React/Next.js", "Firebase", "MongoDB", "Tailwind CSS"],
     links: [
       {
-        label: "Request Beta Access",
-        url: "/contact?subject=LexNova%20Android%20Beta%20Access",
+        label: "Live",
+        url: "https://edufriendsglobal.com",
         kind: "primary",
-      },
-      {
-        label: "Code",
-        url: "https://github.com/Shahadat99x/lawfirm_mobile_app",
-        kind: "secondary",
-      },
-      {
-        label: "Play Store (Beta)",
-        url: "https://play.google.com/store/apps/details?id=com.lexnova.app",
-        kind: "secondary",
       },
     ],
     featured: true,
-    beta: true,
+    quickFacts: {
+      role: "Founder / Developer",
+      type: "Web + Android",
+      usage: "500+ monthly visits, 100+ Android installs",
+    },
+    whatIDid: [
+      "Designed multi-role structure (owner/admin/student flows)",
+      "Built core platform features for consultancy operations",
+      "Deployed and maintained the platform with real users",
+    ],
+    keyFeatures: [
+      "Multi-role accounts and dashboards",
+      "Student/application workflow support",
+      "Content/pages for services and guidance",
+      "Real deployment with ongoing improvements",
+    ],
+    challengesAndLearnings: [
+      "Designing role-based flows that scale",
+      "Handling real user feedback and iteration",
+      "Balancing study with shipping features",
+    ],
   },
   {
-    title: "EstateNova – Real Estate Platform",
+    slug: "estatenova",
+    title: "EstateNova Real Estate Platform",
+    tagline: "Property listing and lead capture platform",
+    statusBadge: "Live",
     description:
-      "A full-stack real estate platform featuring public property listings, lead capture, and an admin dashboard for managing listings, inquiries, and blog content. Built with SEO-first architecture and optimized for production deployment.",
+      "A real estate web platform focused on listings, enquiry capture, and clean presentation.",
     year: 2024,
-    tech: ["Next.js", "TypeScript", "Supabase", "Tailwind CSS", "Docker", "Vercel"],
-    slug: "estatenova-real-estate",
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
     links: [
       {
         label: "Live",
@@ -79,10 +141,30 @@ export const projects: Project[] = [
       },
       {
         label: "Code",
-        url: "https://github.com/Shahadat99x/real-estate-platform",
+        url: "https://github.com/Shahadat99x/real-estate-lead-platform",
         kind: "secondary",
       },
     ],
     featured: true,
+    quickFacts: {
+      role: "Solo Developer",
+      type: "Web Platform",
+    },
+    whatIDid: [
+      "Built listings UI and lead capture flow",
+      "Focused on clean layout and usability",
+      "Deployed as a fast, responsive web app",
+    ],
+    keyFeatures: [
+      "Property listing layout",
+      "Enquiry/lead capture",
+      "Mobile responsive UI",
+      "Fast deployment workflow",
+    ],
+    challengesAndLearnings: [
+      "UI consistency for cards and grids",
+      "Making pages responsive across devices",
+      "Shipping clean, minimal UX",
+    ],
   },
 ];
