@@ -9,36 +9,36 @@ export type TimelineItem = {
 
 export const timeline: TimelineItem[] = [
   {
-    title: "Full-Stack Engineer",
-    organization: "Nordic Applied Intelligence Lab",
+    title: "BSc in Applied Artificial Intelligence",
+    organization: "VILNIUS TECH",
     location: "Vilnius, Lithuania",
-    date: "2024 - Present",
+    date: "Sep 2023 – Present",
     description:
-      "Developing production-ready web platforms and internal tools using Next.js and Supabase. Implementing secure authentication, real-time data features, and responsive administrative dashboards.",
+      "• Applied AI undergraduate student focused on software engineering + AI foundations\n• Building real full-stack projects alongside study",
     highlighted: true,
   },
   {
-    title: "Product Engineer",
-    organization: "Independent",
+    title: "Erasmus Exchange Semester",
+    organization: "",
+    location: "Lisbon, Portugal",
+    date: "5 months",
+    description:
+      "• International academic experience through Erasmus exchange\n• Adapted to a new learning environment and culture",
+  },
+  {
+    title: "Junior IT Specialist",
+    organization: "Al Tayef Overseas Ltd.",
+    location: "Dhaka, Bangladesh",
+    date: "2019 – 2021",
+    description:
+      "• Provided IT support and technical assistance\n• Managed WordPress website updates, hosting, and content maintenance\n• Troubleshot day-to-day system issues",
+  },
+  {
+    title: "Founder / Developer",
+    organization: "EduFriends Global",
     location: "Remote",
-    date: "2022 - 2024",
+    date: "2021 – Present",
     description:
-      "Designed and built end-to-end web applications for clients, focusing on performance, SEO optimisation, and clean user experience. Managed deployment pipelines and cloud infrastructure.",
-  },
-  {
-    title: "Software Developer",
-    organization: "Baltic Fintech Collective",
-    location: "Riga, Latvia",
-    date: "2019 - 2022",
-    description:
-      "Contributed to backend API development and frontend integration. Wrote clean, maintainable code and collaborated with cross-functional teams to deliver feature updates.",
-  },
-  {
-    title: "Computer Science Student",
-    organization: "Vilnius University",
-    location: "Vilnius, Lithuania",
-    date: "2016 - 2019",
-    description:
-      "Focused on software engineering fundamentals, algorithms, and web technologies. Completed capstone project on distributed systems architecture.",
+      "• Built a multi-role education consultancy platform\n• Worked on role-based flows and real user-facing features",
   },
 ];
