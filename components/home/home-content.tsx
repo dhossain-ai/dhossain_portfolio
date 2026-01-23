@@ -104,7 +104,7 @@ export function HomeContent() {
         <SectionHeader
           eyebrow="Selected work"
           title="Recent projects"
-          description="A taste of the AI-native products, data platforms, and developer tools I have shipped recently."
+          description="A selection of the full-stack web platforms and mobile apps I have shipped recently."
         />
         <div className="grid gap-6 md:grid-cols-2">
           {featuredProjects.map((project) => (
@@ -140,23 +140,49 @@ export function HomeContent() {
       <section className="space-y-8">
         <SectionHeader
           eyebrow="Toolbox"
-          title="Stack favourites"
-          description="Technologies I reach for when crafting resilient AI products."
+          title="Tech I use"
+          description="Technologies I use to build and ship full-stack web and mobile apps."
         />
-        <div className="flex flex-wrap gap-3">
-          {[
-            "TypeScript",
-            "Next.js",
-            "Node.js",
-            "Python",
-            "TensorFlow",
-            "MongoDB",
-            "Docker",
-            "Tailwind",
-            "Vercel",
-          ].map((skill) => (
-            <TechBadge key={skill} label={skill} />
-          ))}
+        <div className="space-y-8">
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80 pl-1">
+              Core Stack
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {[
+                "TypeScript",
+                "Next.js",
+                "React",
+                "Node.js",
+                "Supabase",
+                "Firebase",
+                "MongoDB",
+                "Tailwind CSS",
+                "Flutter",
+                "GitHub",
+                "Docker",
+                "Vercel",
+                "Cloudinary",
+              ].map((skill) => (
+                <TechBadge key={skill} label={skill} />
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80 pl-1">
+              Learning & Exploring
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {[
+                "Python",
+                "Machine Learning",
+                "TensorFlow"
+              ].map((skill) => (
+                <TechBadge key={skill} label={skill} />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </div>
