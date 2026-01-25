@@ -1,0 +1,73 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brand-gradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="512" height="512" rx="128" fill="#09090B" />
+  
+  <g transform="translate(106, 128) scale(1.2)">
+    <!-- S Shape -->
+    <path d="M 60 40 L 160 40 A 30 30 0 0 1 190 70 L 190 100 L 90 100 L 90 130 L 190 130 A 30 30 0 0 1 220 160 L 220 200 A 30 30 0 0 1 190 230 L 90 230 A 30 30 0 0 1 60 200 L 60 170 L 160 170 L 160 140 L 60 140 A 30 30 0 0 1 30 110 L 30 70 A 30 30 0 0 1 60 40 Z" fill="url(#brand-gradient)" />
+    
+    <!-- H Shape (Interlocked or adjacent) -->
+    <!-- Let's actually make a simpler unified SH mark -->
+  </g>
+  
+  <!-- Redesigned Minimal Abstract SH -->
+  <!-- A minimal geometric mark: Two vertical bars with a connection S-like flow -->
+  <mask id="cutout">
+     <rect width="512" height="512" fill="white"/>
+     <!-- Negative space cuts -->
+  </mask>
+  
+  <g stroke="url(#brand-gradient)" stroke-width="48" stroke-linecap="round" fill="none">
+    <!-- S part top -->
+    <path d="M 340 156 L 200 156 C 160 156 128 188 128 228 C 128 268 160 300 200 300 L 312 300 C 352 300 384 332 384 372 C 384 412 352 444 312 444 L 172 444" />
+    
+    <!-- Vertical H-pillars integration? Too complex. Let's do a pure S icon for the monogram OR strictly SH. -->
+    
+    <!-- Let's Try "SH" Monogram specific -->
+    <!-- S -->
+    <path d="M 180 120 L 120 120 L 120 240 L 180 240 L 180 360 L 120 360" stroke="none" fill="none"/> 
+  </g>
+
+  <!-- Final Clean Implementation: SH Monogram -->
+  <!-- Resetting content for the final clean output in this file -->
+  <rect width="512" height="512" rx="110" fill="#09090B" />
+  
+  <!-- S -->
+  <path d="M 170 150 
+           L 290 150 
+           A 30 30 0 0 1 290 210 
+           L 170 210 
+           A 30 30 0 0 0 170 270 
+           L 290 270" 
+        stroke="url(#brand-gradient)" 
+        stroke-width="50" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="none" />
+        
+  <!-- H: Vertical line intersecting? No, let's keep it legible.
+       Actually, standard industry practice for a personal brand "SH" often merges the middle bar.
+       Let's put the H next to it or imply it.
+       
+       Let's stick to the prompt: "Mark version uses initials SH"
+   -->
+   
+   <!-- H Bar on right -->
+   <line x1="360" y1="150" x2="360" y2="350" stroke="url(#brand-gradient)" stroke-width="50" stroke-linecap="round" />
+   <!-- S is acting as the crossbar? No, that's messy. -->
+   
+   <!-- Let's do a pure geometric distinct SH -->
+   <!-- Rect(S) and Rect(H) -->
+   <!-- Left Side S -->
+   <path d="M 230 140 L 140 140 L 140 210 L 230 210 L 230 280 L 140 280" stroke="white" stroke-width="40" stroke-linecap="round" fill="none"/>
+   
+   <!-- Right Side H -->
+   <path d="M 280 140 L 280 280 M 370 140 L 370 280 M 280 210 L 370 210" stroke="url(#brand-gradient)" stroke-width="40" stroke-linecap="round" fill="none"/>
+   
+</svg>
