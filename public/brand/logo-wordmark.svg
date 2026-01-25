@@ -1,0 +1,24 @@
+<svg width="600" height="150" viewBox="0 0 600 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad2" x1="0" y1="0" x2="100%" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="600" height="150" fill="#00000000" /> <!-- Transparent BG -->
+  
+  <!-- Symbol (SH) Small -->
+  <g transform="translate(20, 35) scale(0.18)">
+      <path d="M 230 156 L 146 156 L 146 226 L 230 226 L 230 296 L 146 296" stroke="white" stroke-width="42" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+      <path d="M 290 156 L 290 296 M 374 156 L 374 296 M 290 226 L 374 226" stroke="url(#grad2)" stroke-width="42" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  </g>
+
+  <!-- Text "Shahadat" -->
+  <text x="130" y="95" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="64" fill="white" letter-spacing="-2">
+    Shahadat
+  </text>
+  
+  <!-- Dot / Accent -->
+  <circle cx="445" cy="95" r="5" fill="url(#grad2)" />
+</svg>
