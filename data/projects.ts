@@ -35,7 +35,7 @@ export const projects: Project[] = [
     tagline: "Web platform + admin dashboard + Android app for legal services",
     statusBadge: "Beta",
     description:
-      "A modern legal services platform showcasing service pages, blog content, enquiries, and an admin workflow.",
+      "A legal services platform with a public site, admin dashboard, and a Flutter Android app for managing services, content, and enquiries.",
     year: 2024,
     tech: [
       "Next.js",
@@ -91,7 +91,7 @@ export const projects: Project[] = [
     tagline: "Multi-role education consultancy platform (web + Android)",
     statusBadge: "Live",
     description:
-      "An education consultancy platform with multiple user roles and real usage, built for student support and application workflows.",
+      "An education consultancy platform with multiple user roles (owner, admin, student) and real usage across web and Android.",
     year: 2021,
     tech: ["React/Next.js", "Firebase", "MongoDB", "Tailwind CSS"],
     links: [
@@ -130,7 +130,7 @@ export const projects: Project[] = [
     tagline: "Property listing and lead capture platform",
     statusBadge: "Live",
     description:
-      "A real estate web platform focused on listings, enquiry capture, and clean presentation.",
+      "A real estate web platform focused on property listings, enquiry capture, and clean presentation.",
     year: 2024,
     tech: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
     links: [

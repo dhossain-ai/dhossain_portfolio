@@ -60,7 +60,7 @@ export function ContactForm() {
         <SectionHeader
           eyebrow="Contact"
           title="Let us explore what we can build together"
-          description="Share a challenge, a product idea, or a dataset that needs a story. I reply within two business days."
+          description="Share a challenge, a product idea, or a dataset that needs a story. I usually reply within two business days."
         />
         <div className="space-y-6 rounded-3xl border border-border/70 bg-card/80 p-6 shadow-sm">
           <ContactDetail
@@ -77,7 +77,7 @@ export function ContactForm() {
           <ContactDetail
             icon={Rocket}
             title="Ideal projects"
-            description="Applied AI products, ML platforms, and data storytelling that ships."
+            description="Full-stack web platforms, admin dashboards, and Android apps. I’m also open to AI/ML experiments as I continue learning."
           />
         </div>
       </div>

@@ -29,8 +29,8 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
 
   const filtered = stack
     ? projects.filter((project) =>
-        project.tech.map((item) => item.toLowerCase()).includes(stack.toLowerCase()),
-      )
+      project.tech.map((item) => item.toLowerCase()).includes(stack.toLowerCase()),
+    )
     : projects;
 
   const show404 = stack && filtered.length === 0;
@@ -42,8 +42,8 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
     <div className="space-y-12">
       <SectionHeader
         eyebrow="Project archive"
-        title="AI products that ship"
-        description="From proof-of-concept to production launches, here is a curated collection of the experiments, platforms, and experiences I am excited about."
+        title="Projects that ship"
+        description="From proof-of-concept to shipping versions, here is a curated collection of the platforms and apps I’ve built or maintained."
       />
 
       <div className="flex flex-wrap items-center gap-2">
