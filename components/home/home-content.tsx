@@ -21,81 +21,112 @@ const focusAreas = [
 export function HomeContent() {
   return (
     <div className="space-y-24">
-      <section className="relative overflow-hidden rounded-[2.5rem] border border-border/60 bg-gradient-to-br from-primary/10 via-background to-background px-6 py-12 shadow-soft sm:px-10 md:px-14 md:py-16">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden rounded-[2.5rem] border border-border/60 px-6 py-20 shadow-soft sm:px-10 md:px-14 md:py-24">
+
+        {/* Ambient Backgrounds - Dark Mode optimized */}
+        <div className="pointer-events-none absolute inset-0 select-none">
+          {/* Top Right Blob */}
+          <div className="absolute -top-[20%] -right-[10%] h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px] dark:bg-primary/20" />
+          {/* Bottom Left Blob */}
+          <div className="absolute -bottom-[20%] -left-[10%] h-[400px] w-[400px] rounded-full bg-blue-500/10 blur-[100px] dark:bg-purple-500/20" />
+          {/* Gradient Overlay for subtle texture */}
+          <div className="absolute inset-0 bg-gradient-to-br from-background/50 via-background/20 to-background/50 backdrop-blur-[1px]" />
+        </div>
+
         <motion.div
-          className="space-y-8"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative z-10 space-y-8"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1, delayChildren: 0.2 } // Stagger reveals
+            }
+          }}
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+          {/* Badge */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary backdrop-blur-md"
+          >
             <Sparkles className="h-3.5 w-3.5" />
-            AI & Data Science Explorer
-          </div>
-          <div className="space-y-6 text-balance">
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
-              Building. Shipping. Improving. 🚀
+            AI & Functionality
+          </motion.div>
+
+          {/* Main Headline */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            className="space-y-6 text-balance"
+          >
+            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl">
+              Building.<br />
+              Shipping.<br />
+              <span className="text-primary">Evolving.</span>
             </h1>
-            <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
-              Applied AI student at VILNIUS TECH. I ship full-stack apps with clean UI, scalable backend flows, and real-world features — with a growing foundation in AI/ML.
+            <p className="max-w-2xl text-lg text-muted-foreground sm:text-xl md:leading-relaxed">
+              Applied AI student at VILNIUS TECH. I ship full-stack apps with <span className="text-foreground font-medium">clean UI</span>, <span className="text-foreground font-medium">scalable backends</span>, and <span className="text-foreground font-medium">real-world impact</span>.
             </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
+          </motion.div>
+
+          {/* Metadata / Location */}
+          <motion.div
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+            className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground"
+          >
+            <div className="flex items-center gap-2 rounded-full bg-background/50 px-3 py-1 backdrop-blur-sm border border-border/50">
               <MapPin className="h-4 w-4 text-primary" />
               {siteConfig.location}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 rounded-full bg-background/50 px-3 py-1 backdrop-blur-sm border border-border/50">
               <Mail className="h-4 w-4 text-primary" />
-              <a className="hover:text-primary" href={`mailto:${siteConfig.email}`}>
+              <a className="hover:text-primary transition-colors" href={`mailto:${siteConfig.email}`}>
                 {siteConfig.email}
               </a>
             </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Button asChild size="lg" className="rounded-3xl">
+          </motion.div>
+
+          {/* CTAs */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+            className="flex flex-wrap items-center gap-4 pt-2"
+          >
+            <Button asChild size="lg" className="rounded-full h-12 px-8 shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:shadow-primary/30">
               <Link href="/projects">
                 View projects
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button
               asChild
               variant="outline"
               size="lg"
-              className="rounded-3xl text-foreground"
+              className="rounded-full h-12 px-8 bg-background/50 backdrop-blur-sm hover:bg-background/80"
             >
               <Link href="/contact">
                 Start a project
-                <Mail className="h-4 w-4" />
+                <Mail className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-          </div>
+          </motion.div>
         </motion.div>
+
+        {/* Focus Chips */}
         <motion.div
-          className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: {
-                staggerChildren: 0.15,
-              },
-            },
-          }}
+          className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
         >
           {focusAreas.map((area) => (
-            <motion.div
+            <div
               key={area}
-              variants={{
-                hidden: { opacity: 0, y: 16 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              className="rounded-2xl border border-border/60 bg-card/80 p-5 text-sm text-muted-foreground shadow-sm backdrop-blur"
+              className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background/40 p-5 text-sm font-medium text-foreground/80 shadow-sm backdrop-blur-md transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-md dark:bg-zinc-900/40"
             >
-              {area}
-            </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <span className="relative">{area}</span>
+            </div>
           ))}
         </motion.div>
       </section>
