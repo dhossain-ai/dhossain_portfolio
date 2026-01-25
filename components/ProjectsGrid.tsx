@@ -29,7 +29,8 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
       className="grid gap-6 md:grid-cols-2"
       variants={containerVariants}
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
     >
       {projects.map((project) => (
         <motion.div key={project.slug} variants={itemVariants}>

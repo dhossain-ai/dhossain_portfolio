@@ -12,13 +12,13 @@ const highlights = [
     icon: Target,
     title: "Product-ready builds",
     description:
-      "Shipping web platforms, admin dashboards, and backend logic end-to-end.",
+      "Shipping web platforms, admin dashboards, and running backend logic end-to-end.",
   },
   {
     icon: Users,
     title: "Web + Android",
     description:
-      "Modern web experiences + Flutter apps designed for real usage.",
+      "Modern web experiences + Flutter Android apps designed for real usage.",
   },
   {
     icon: GraduationCap,
@@ -34,9 +34,7 @@ export function AboutContent() {
       <SectionHeader
         eyebrow="About"
         title="Curious by nature. Builder by choice."
-        description="Applied AI student building full-stack web and Android apps.
-I care about clean interfaces, scalable backend flows, and real features users need.
-Currently growing into AI/ML with Python through learning and experimentation."
+        description="Applied AI student building full-stack web and Android apps. I care about clean interfaces, scalable backend flows, and real features users need. Currently growing into AI/ML with Python through learning and experimentation."
       />
 
       <div className="grid gap-6 sm:grid-cols-3">
@@ -80,32 +78,19 @@ Currently growing into AI/ML with Python through learning and experimentation."
             {skillGroups.map((group) => (
               <div
                 key={group.title}
-                className="space-y-3 rounded-3xl border border-border/60 bg-card/70 p-5 shadow-sm"
+                className="space-y-4 rounded-3xl border border-border/60 bg-card/70 p-6 shadow-sm"
               >
                 <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                   {group.title}
                 </h3>
-                <div className="space-y-3">
+                <div className="flex flex-wrap gap-2">
                   {group.items.map((skill) => (
-                    <div key={skill.name} className="space-y-1">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="font-medium text-foreground">
-                          {skill.name}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {skill.level}%
-                        </span>
-                      </div>
-                      <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-                        <motion.div
-                          className="h-full rounded-full bg-primary"
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.level}%` }}
-                          viewport={{ once: true, amount: 0.6 }}
-                          transition={{ duration: 0.5, ease: "easeOut" }}
-                        />
-                      </div>
-                    </div>
+                    <span
+                      key={skill}
+                      className="inline-flex items-center rounded-md border border-border/50 bg-background/50 px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-background hover:text-primary"
+                    >
+                      {skill}
+                    </span>
                   ))}
                 </div>
               </div>
