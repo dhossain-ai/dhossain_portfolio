@@ -19,7 +19,7 @@ export const timeline: TimelineItem[] = [
   },
   {
     title: "Erasmus Exchange Semester",
-    organization: "",
+    organization: "Erasmus Programme",
     location: "Lisbon, Portugal",
     date: "5 months",
     description:
@@ -42,3 +42,4 @@ export const timeline: TimelineItem[] = [
       "• Built a multi-role education consultancy platform\n• Worked on role-based flows and real user-facing features",
   },
 ];
+
