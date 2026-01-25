@@ -6,21 +6,26 @@
     </linearGradient>
   </defs>
   
-  <rect width="512" height="512" rx="120" fill="#09090B" />
+  <!-- Background: Perfectly Centered Rounded Square -->
+  <rect width="512" height="512" rx="128" fill="#09090B" />
   
-  <!-- S Shape -->
-  <path d="M 230 156 L 146 156 L 146 226 L 230 226 L 230 296 L 146 296" 
+  <!-- Content Group: Centered -->
+  <!-- Total Width: 340px | Height: 200px -->
+  <!-- Center X: 256 | Center Y: 256 -->
+  <!-- S: x=86..226 | Gap=60 | H: x=286..426 -->
+  
+  <!-- S Shape: White Outline -->
+  <path d="M 226 156 L 86 156 L 86 256 L 226 256 L 226 356 L 86 356" 
         stroke="white" 
-        stroke-width="42" 
+        stroke-width="56" 
         stroke-linecap="round" 
         stroke-linejoin="round"
-        fill="none" 
-        opacity="0.9"/>
+        fill="none" />
 
-  <!-- H Shape -->
-  <path d="M 290 156 L 290 296 M 374 156 L 374 296 M 290 226 L 374 226" 
+  <!-- H Shape: Gradient -->
+  <path d="M 286 156 L 286 356 M 426 156 L 426 356 M 286 256 L 426 256" 
         stroke="url(#grad1)" 
-        stroke-width="42" 
+        stroke-width="56" 
         stroke-linecap="round" 
         stroke-linejoin="round"
         fill="none" />
