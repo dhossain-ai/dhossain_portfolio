@@ -1,25 +1,8 @@
-import Link from "next/link";
-import Image from "next/image";mage";
-  // ... imports
+"use client";
 
-  // ... inside Navbar ...
-  < Link
-href = "/"
-className = "flex items-center gap-3 text-sm font-semibold text-foreground ring-focus"
-  >
-  {/* Brand Logo Monogram */ }
-  < Image
-src = "/brand/logo-monogram.svg"
-alt = "SH Logo"
-width = { 36}
-height = { 36}
-className = "h-9 w-9 rounded-xl shadow-sm transition-transform hover:scale-105"
-  />
-  {/* Wordmark (for tablet+) or Text Fallback */ }
-  < span className = "hidden text-base font-bold tracking-tight sm:inline" >
-    Shahadat
-  </span >
-</Link >
+import * as React from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
