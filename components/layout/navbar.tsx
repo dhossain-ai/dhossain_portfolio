@@ -1,7 +1,25 @@
-"use client";
-
-import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";mage";
+  // ... imports
+
+  // ... inside Navbar ...
+  < Link
+href = "/"
+className = "flex items-center gap-3 text-sm font-semibold text-foreground ring-focus"
+  >
+  {/* Brand Logo Monogram */ }
+  < Image
+src = "/brand/logo-monogram.svg"
+alt = "SH Logo"
+width = { 36}
+height = { 36}
+className = "h-9 w-9 rounded-xl shadow-sm transition-transform hover:scale-105"
+  />
+  {/* Wordmark (for tablet+) or Text Fallback */ }
+  < span className = "hidden text-base font-bold tracking-tight sm:inline" >
+    Shahadat
+  </span >
+</Link >
 import { usePathname } from "next/navigation";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,13 +43,19 @@ export function Navbar() {
         <div className="mx-auto flex h-16 max-w-content-xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm font-semibold text-foreground ring-focus"
+            className="flex items-center gap-3 text-sm font-semibold text-foreground ring-focus"
           >
-            <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary/90 to-accent/90 text-background shadow-soft">
-              SH
-            </span>
-            <span className="hidden sm:inline">
-              {siteConfig.name.split(" ")[0]}
+            {/* Brand Logo Monogram */}
+            <Image
+              src="/brand/logo-monogram.svg"
+              alt="SH Logo"
+              width={36}
+              height={36}
+              className="h-9 w-9 rounded-xl shadow-sm transition-transform hover:scale-105"
+            />
+            {/* Wordmark (for tablet+) or Text Fallback */}
+            <span className="hidden text-base font-bold tracking-tight sm:inline">
+              Shahadat
             </span>
           </Link>
 
