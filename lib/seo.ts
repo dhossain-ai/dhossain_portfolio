@@ -52,6 +52,11 @@ export function buildMetadata({
         absoluteUrl(`/og?title=${encodeURIComponent(title ?? siteConfig.name)}`),
       ],
     },
+    icons: {
+      icon: "/brand/favicon.svg",
+      shortcut: "/brand/favicon.svg",
+      apple: "/brand/favicon.svg",
+    },
   };
 }
 
