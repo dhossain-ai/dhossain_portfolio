@@ -9,7 +9,6 @@ import { TechBadge } from "@/components/tech-badge";
 import { ProjectCard } from "@/components/project-card";
 import { projects } from "@/data/projects";
 import { siteConfig } from "@/data/site";
-import Marquee from "@/components/ui/marquee";
 
 const featuredProjects = projects.filter((project) => project.featured).slice(0, 3);
 
@@ -174,43 +173,80 @@ export function HomeContent() {
           description="Technologies I use to build and ship full-stack web and mobile apps."
         />
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-3xl border border-border/60 bg-background/50 py-12 md:shadow-xl">
-          <Marquee pauseOnHover className="[--duration:40s]">
-            {[
-              "TypeScript",
-              "Next.js",
-              "React",
-              "Node.js",
-              "Supabase",
-              "Firebase",
-              "MongoDB",
-              "Tailwind CSS",
-              "Flutter",
-              "GitHub",
-              "Docker",
-              "Vercel",
-              "Cloudinary",
-            ].map((skill) => (
-              <TechBadge key={skill} label={skill} />
-            ))}
-          </Marquee>
-          <Marquee reverse pauseOnHover className="[--duration:35s] mt-4">
-            {[
-              "Python",
-              "Machine Learning",
-              "TensorFlow",
-              "OpenAI API",
-              "LangChain",
-              "PostgreSQL",
-              "Redis",
-              "AWS",
-              "Figma",
-              "Prisma",
-            ].map((skill) => (
-              <TechBadge key={skill} label={skill} />
-            ))}
-          </Marquee>
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background dark:from-background"></div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background dark:from-background"></div>
+          <div className="grid w-full gap-8 px-8 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Core Web */}
+            <div className="flex flex-col gap-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">
+                Core Web
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Next.js",
+                  "TypeScript",
+                  "JavaScript",
+                  "Node.js",
+                  "Tailwind CSS",
+                ].map((skill) => (
+                  <TechBadge key={skill} label={skill} />
+                ))}
+              </div>
+            </div>
+
+            {/* Platforms & Infra */}
+            <div className="flex flex-col gap-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">
+                Platforms & Infra
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Supabase",
+                  "Firebase",
+                  "Cloudinary",
+                  "Vercel",
+                  "GitHub",
+                  "Docker",
+                ].map((skill) => (
+                  <TechBadge key={skill} label={skill} />
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile */}
+            <div className="flex flex-col gap-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">
+                Mobile
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {["Flutter"].map((skill) => (
+                  <TechBadge key={skill} label={skill} />
+                ))}
+              </div>
+            </div>
+
+            {/* Python + AI/ML */}
+            <div className="flex flex-col gap-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">
+                Python + AI/ML
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Python",
+                  "NumPy",
+                  "Pandas",
+                  "Scikit-Learn",
+                  "OpenCV",
+                ].map((skill) => (
+                  <TechBadge key={skill} label={skill} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-sm font-medium text-muted-foreground/80">
+              Currently exploring deeper: <span className="text-foreground">Computer Vision & Machine Learning</span>
+            </p>
+          </div>
         </div>
       </section>
     </div>
