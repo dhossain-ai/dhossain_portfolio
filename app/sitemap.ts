@@ -1,21 +1,36 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/data/site";
-import { getAllPosts } from "@/lib/mdx";
+import { getPublishedPosts } from "@/lib/blog";
+import { getPublishedProjects } from "@/lib/projects";
+
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.url.replace(/\/$/, "");
   const lastMod = new Date();
 
-  const routes: MetadataRoute.Sitemap = ["/", "/projects", "/about", "/blog", "/contact"].map((path) => ({
+  const routes: MetadataRoute.Sitemap = ["/", "/projects", "/about", "/blog", "/journal", "/contact"].map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: lastMod,
   }));
 
-  const posts = await getAllPosts();
-  const postEntries = posts.map((post) => ({
+  const blogPosts = await getPublishedPosts('blog');
+  const journalPosts = await getPublishedPosts('journal');
+
+  const blogEntries = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+    lastModified: new Date(post.updated_at),
   }));
 
-  return [...routes, ...postEntries];
+  const journalEntries = journalPosts.map((post) => ({
+    url: `${baseUrl}/journal/${post.slug}`,
+    lastModified: new Date(post.updated_at),
+  }));
+
+  const projects = await getPublishedProjects();
+  const projectEntries = projects.map((project) => ({
+    url: `${baseUrl}/projects/${project.slug}`,
+    lastModified: new Date(project.updated_at),
+  }));
+
+  return [...routes, ...blogEntries, ...journalEntries, ...projectEntries];
 }

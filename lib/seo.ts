@@ -6,6 +6,7 @@ type BuildMetadataInput = {
   title?: string;
   description?: string;
   path?: string;
+  image?: string;
 };
 
 const baseTitle = `${siteConfig.name} | ${siteConfig.title}`;
@@ -14,6 +15,7 @@ export function buildMetadata({
   title,
   description,
   path = "/",
+  image,
 }: BuildMetadataInput = {}): Metadata {
   const pageTitle = title ? `${title} | ${siteConfig.name}` : baseTitle;
   const pageDescription = description ?? siteConfig.description;
@@ -35,7 +37,7 @@ export function buildMetadata({
       type: "website",
       images: [
         {
-          url: absoluteUrl(`/og?title=${encodeURIComponent(title ?? siteConfig.name)}`),
+          url: image ? absoluteUrl(image) : absoluteUrl(`/og?title=${encodeURIComponent(title ?? siteConfig.name)}`),
           width: 1200,
           height: 630,
           alt: `${siteConfig.name} - ${siteConfig.tagline}`,

@@ -6,7 +6,7 @@ import { FilterX } from "lucide-react";
 import { SectionHeader } from "@/components/section-header";
 import { ProjectsGrid } from "@/components/ProjectsGrid";
 import { Button } from "@/components/ui/button";
-import { projects } from "@/data/projects";
+import { getPublishedProjects } from "@/lib/projects";
 import { buildMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -21,15 +21,19 @@ type PageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-const tags = Array.from(new Set(projects.flatMap((project) => project.tech))).sort();
+export const revalidate = 60; // ISR
 
 export default async function ProjectsPage({ searchParams }: PageProps) {
   const params = searchParams ? await searchParams : undefined;
   const stack = normalizeParam(params?.stack);
 
+  const projects = await getPublishedProjects();
+
+  const allTags = Array.from(new Set(projects.flatMap((project) => project.stack))).sort();
+
   const filtered = stack
     ? projects.filter((project) =>
-      project.tech.map((item) => item.toLowerCase()).includes(stack.toLowerCase()),
+      project.stack.map((item) => item.toLowerCase()).includes(stack.toLowerCase()),
     )
     : projects;
 
@@ -50,7 +54,7 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
         <FilterPill href="/projects" active={!stack}>
           All
         </FilterPill>
-        {tags.map((tag) => (
+        {allTags.map((tag) => (
           <FilterPill
             key={tag}
             href={`/projects?stack=${encodeURIComponent(tag)}`}
@@ -103,4 +107,3 @@ function FilterPill({ href, active, children }: FilterPillProps) {
     </Link>
   );
 }
-

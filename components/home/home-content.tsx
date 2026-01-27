@@ -7,10 +7,8 @@ import { SectionHeader } from "@/components/section-header";
 import { Button } from "@/components/ui/button";
 import { TechBadge } from "@/components/tech-badge";
 import { ProjectCard } from "@/components/project-card";
-import { projects } from "@/data/projects";
 import { siteConfig } from "@/data/site";
-
-const featuredProjects = projects.filter((project) => project.featured).slice(0, 3);
+import type { Project } from "@/lib/projects";
 
 const focusAreas = [
   "Full-stack products",
@@ -18,24 +16,28 @@ const focusAreas = [
   "AI/ML journey",
 ];
 
-export function HomeContent() {
+type HomeContentProps = {
+  featuredProjects: Project[];
+}
+
+export function HomeContent({ featuredProjects }: HomeContentProps) {
   return (
-    <div className="space-y-24">
+    <div className="space-y-16 md:space-y-20">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-[2.5rem] border border-border/60 px-6 py-20 shadow-soft sm:px-10 md:px-14 md:py-24">
+      <section className="relative overflow-hidden rounded-[2.5rem] border border-border/60 px-6 py-14 shadow-soft sm:px-8 md:px-10 md:py-16">
 
         {/* Ambient Backgrounds - Dark Mode optimized */}
         <div className="pointer-events-none absolute inset-0 select-none">
           {/* Top Right Blob */}
-          <div className="absolute -top-[20%] -right-[10%] h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px] dark:bg-primary/20" />
+          <div className="absolute -top-[20%] -right-[10%] h-[350px] w-[350px] rounded-full bg-primary/10 blur-[100px] dark:bg-primary/20" />
           {/* Bottom Left Blob */}
-          <div className="absolute -bottom-[20%] -left-[10%] h-[400px] w-[400px] rounded-full bg-blue-500/10 blur-[100px] dark:bg-purple-500/20" />
+          <div className="absolute -bottom-[20%] -left-[10%] h-[280px] w-[280px] rounded-full bg-blue-500/10 blur-[80px] dark:bg-purple-500/20" />
           {/* Gradient Overlay for subtle texture */}
           <div className="absolute inset-0 bg-gradient-to-br from-background/50 via-background/20 to-background/50 backdrop-blur-[1px]" />
         </div>
 
         <motion.div
-          className="relative z-10 space-y-8"
+          className="relative z-10 space-y-6"
           initial="hidden"
           animate="visible"
           variants={{
@@ -112,7 +114,7 @@ export function HomeContent() {
 
         {/* Focus Chips */}
         <motion.div
-          className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}
@@ -129,7 +131,7 @@ export function HomeContent() {
         </motion.div>
       </section>
 
-      <section id="projects" className="space-y-10">
+      <section id="projects" className="space-y-8">
         <SectionHeader
           eyebrow="Selected work"
           title="Recent projects"
