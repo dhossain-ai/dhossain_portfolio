@@ -65,6 +65,19 @@ html {
   }
 }
 
+/* Markdown Prose Overrides */
+/* Prevent headings from looking like links even if they contain anchors */
+.prose :where(h1, h2, h3, h4, h5, h6) a {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-weight: inherit !important;
+}
+
+.prose :where(h1, h2, h3, h4, h5, h6) a:hover {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

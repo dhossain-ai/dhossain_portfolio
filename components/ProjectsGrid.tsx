@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { Project } from "@/data/projects";
+import type { Project } from "@/lib/projects";
 import { ProjectCard } from "@/components/project-card";
 
 type ProjectsGridProps = {
