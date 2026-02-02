@@ -436,6 +436,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
 
                                         <CldUploadWidget
                                             uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                             onSuccess={(result: any) => {
                                                 if (result.info?.secure_url) {
                                                     const current = form.getValues('gallery_images') || []

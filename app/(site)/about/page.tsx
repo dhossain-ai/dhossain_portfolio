@@ -9,5 +9,32 @@ export const metadata = buildMetadata({
 });
 
 export default function AboutPage() {
-  return <AboutContent />;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Shahadat Hossain",
+    jobTitle: ["Applied AI student", "Full-stack developer"],
+    url: "https://dhossian.com/about",
+    sameAs: [
+      "https://github.com/Shahadat99x",
+      "https://linkedin.com/in/shahadat-ai",
+      "https://x.com/shahadat_ai"
+    ],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Vilnius",
+      addressCountry: "Lithuania"
+    },
+    knowsAbout: ["Next.js", "TypeScript", "Supabase", "Flutter", "Tailwind CSS", "AI/ML", "Computer Vision"]
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <AboutContent />
+    </>
+  );
 }
