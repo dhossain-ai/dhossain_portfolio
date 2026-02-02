@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { GraduationCap, Target, Globe, Code2, Mail, Github, Linkedin } from "lucide-react";
 import Image from "next/image";
@@ -10,6 +11,36 @@ import { Button } from "@/components/ui/button";
 import { skillGroups } from "@/data/skills";
 import { timeline } from "@/data/timeline";
 import { siteConfig, socialLinks } from "@/data/site";
+
+function ProfileImage() {
+  const [src, setSrc] = useState("/images/profile.jpg");
+  const [attempts, setAttempts] = useState(0);
+
+  const fallbacks = [
+    "/images/profile.png",
+    "/images/profile.jpeg",
+    "/images/profile-placeholder.png"
+  ];
+
+  return (
+    <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
+      <Image
+        src={src}
+        alt={siteConfig.name}
+        fill
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        priority
+        onError={() => {
+          if (attempts < fallbacks.length) {
+            setSrc(fallbacks[attempts]);
+            setAttempts(prev => prev + 1);
+          }
+        }}
+        unoptimized // Allow local file loading without strict optimization checks during dev/fallback
+      />
+    </div>
+  );
+}
 
 const highlights = [
   {
@@ -70,15 +101,7 @@ export function AboutContent() {
           transition={{ duration: 0.5 }}
           className="group sticky top-24 overflow-hidden rounded-3xl border border-border bg-card shadow-soft"
         >
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
-            <Image
-              src="/images/profile-placeholder.png"
-              alt={siteConfig.name}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              priority
-            />
-          </div>
+          <ProfileImage />
           <div className="p-6 space-y-4 bg-card/50 backdrop-blur-sm">
             <div>
               <h3 className="font-bold text-lg text-foreground">{siteConfig.name}</h3>
