@@ -12,11 +12,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
-import { ArrowLeft, Save, Loader2, ImageIcon, X, ExternalLink, CheckCircle2 } from 'lucide-react'
+import { Loader2, ImageIcon, X } from 'lucide-react'
 import { Post } from '@/lib/blog'
 import { EditorToolbar } from './editor-toolbar'
+import { EditorActions, EditorHeader } from '@/components/admin/editor'
 import { CldUploadWidget } from 'next-cloudinary'
 import Image from 'next/image'
 
@@ -184,64 +184,31 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <input type="hidden" {...form.register('type')} />
-            <div className="flex items-center justify-between sticky top-0 z-10 bg-background/95 backdrop-blur py-4 border-b">
-                <div className="flex items-center gap-4">
-                    <Link href={isJournal ? "/admin/journal" : "/admin/posts"}>
-                        <Button variant="ghost" size="icon">
-                            <ArrowLeft className="h-4 w-4" />
-                        </Button>
-                    </Link>
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-3">
-                            <h2 className="text-lg font-semibold">{post?.title || 'New Post'}</h2>
-                            {isEditing && (
-                                <span className="flex items-center text-xs font-medium">
-                                    {saveState === 'saving' && <span className="flex items-center text-yellow-600 dark:text-yellow-500"><Loader2 className="mr-1 h-3 w-3 animate-spin"/> Saving...</span>}
-                                    {saveState === 'saved' && <span className="flex items-center text-green-600 dark:text-green-500"><CheckCircle2 className="mr-1 h-3 w-3"/> Saved</span>}
-                                    {saveState === 'unsaved' && <span className="text-muted-foreground">Unsaved changes</span>}
-                                    {saveState === 'failed' && <span className="text-destructive">Save failed</span>}
-                                </span>
-                            )}
-                        </div>
-                        <div className="flex items-center gap-2 mt-0.5">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${form.watch('status') === 'published' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'}`}>
-                                {form.watch('status') === 'published' ? 'Published' : 'Draft'}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    {isEditing && (
-                        <Button type="button" variant="outline" size="sm" onClick={handleExternalPreview}>
-                            <ExternalLink className="mr-2 h-4 w-4" />
-                            Preview
-                        </Button>
-                    )}
-                    
-                    {isEditing ? (
-                        form.watch('status') === 'draft' ? (
-                            <Button type="button" size="sm" onClick={() => {
-                                form.setValue('status', 'published', { shouldDirty: true })
-                                form.handleSubmit(onSubmit)()
-                            }} disabled={isPending || saveState === 'saving'}>
-                                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Publish
-                            </Button>
-                        ) : (
-                            <Button type="button" size="sm" onClick={() => {
-                                form.handleSubmit(onSubmit)()
-                            }} disabled={isPending || saveState === 'saved' || saveState === 'idle'}>
-                                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Update
-                            </Button>
-                        )
-                    ) : (
-                        <Button type="submit" size="sm" disabled={isPending}>
-                            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                            Create Draft
-                        </Button>
-                    )}
-                </div>
+            
+            <EditorHeader
+                title={post?.title || 'New Post'}
+                isEditing={isEditing}
+                saveState={saveState}
+                status={form.watch('status') === 'published' ? 'published' : 'draft'}
+                backHref={isJournal ? "/admin/journal" : "/admin/posts"}
+            >
+            </EditorHeader>
+
+            <div className="flex justify-end">
+                <EditorActions
+                    isEditing={isEditing}
+                    isPending={isPending}
+                    saveState={saveState}
+                    status={form.watch('status') === 'published' ? 'published' : 'draft'}
+                    previewUrl={post?.id ? `/preview/post/${post.id}` : null}
+                    onPreview={handleExternalPreview}
+                    onPublish={() => {
+                        form.setValue('status', 'published', { shouldDirty: true })
+                        form.handleSubmit(onSubmit)()
+                    }}
+                    onUpdate={() => form.handleSubmit(onSubmit)()}
+                    onCreateDraft={() => form.handleSubmit(onSubmit)()}
+                />
             </div>
 
             <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
