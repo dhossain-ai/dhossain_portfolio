@@ -1,11 +1,11 @@
 
 'use client'
 
-import { useTransition, useState } from 'react'
+import { useTransition, useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { postSchema, type PostFormValues } from './schema'
-import { updatePost } from './actions'
+import { createPost, updatePost } from './actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,7 +14,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
-import { ArrowLeft, Save, Loader2, ImageIcon, X, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Save, Loader2, ImageIcon, X, ExternalLink, CheckCircle2 } from 'lucide-react'
 import { Post } from '@/lib/blog'
 import { EditorToolbar } from './editor-toolbar'
 import { CldUploadWidget } from 'next-cloudinary'
@@ -29,6 +29,12 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit')
+    
+    const isEditing = !!post?.id
+
+    const [saveState, setSaveState] = useState<'idle' | 'unsaved' | 'saving' | 'saved' | 'failed'>('idle')
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const [initialLoad, setInitialLoad] = useState(true)
 
     const form = useForm({
         resolver: zodResolver(postSchema),
@@ -52,21 +58,79 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
     const contentMarkdown = form.watch('content_markdown')
 
     const onSubmit = (values: PostFormValues) => {
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
         startTransition(async () => {
             try {
                 const formattedData = {
                     ...values,
                     tags: values.tags ? values.tags.split(',').map(t => t.trim()).filter(Boolean) : []
                 }
-                await updatePost(post.id, formattedData)
-                toast.success('Post saved')
+                
+                if (isEditing && post?.id) {
+                    setSaveState('saving')
+                    await updatePost(post.id, formattedData)
+                    setSaveState('saved')
+                    toast.success('Post updated')
+                } else {
+                    await createPost(formattedData)
+                    toast.success('Post created')
+                }
                 router.refresh()
             } catch (error) {
                 console.error(error)
+                setSaveState('failed')
                 toast.error('Failed to save post')
             }
         })
     }
+
+    // Clear initial load flag
+    useEffect(() => { setInitialLoad(false) }, [])
+
+    // Auto-save effect
+    const watchedValues = form.watch()
+    useEffect(() => {
+        if (initialLoad) return
+        if (!isEditing) return
+
+        setSaveState('unsaved')
+        
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current)
+        }
+
+        typingTimeoutRef.current = setTimeout(async () => {
+            setSaveState('saving')
+            try {
+                const values = form.getValues() as PostFormValues
+                const formattedData = {
+                    ...values,
+                    tags: values.tags ? values.tags.split(',').map(t => t.trim()).filter(Boolean) : []
+                }
+                await updatePost(post!.id!, formattedData)
+                setSaveState('saved')
+            } catch (error) {
+                console.error('Autosave error', error)
+                setSaveState('failed')
+            }
+        }, 1500)
+
+        return () => {
+            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+        }
+    }, [watchedValues, isEditing, initialLoad, post])
+
+    // Unsaved changes leave warning
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (saveState === 'unsaved' || saveState === 'saving') {
+                e.preventDefault()
+                e.returnValue = ''
+            }
+        }
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+    }, [saveState])
 
     const handleSlugGenerate = () => {
         const title = form.getValues('title')
@@ -128,24 +192,55 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
                         </Button>
                     </Link>
                     <div className="flex flex-col">
-                        <h2 className="text-lg font-semibold">{post.title || 'Untitled Post'}</h2>
-                        <span className={`text-xs ${post.status === 'published' ? 'text-green-500' : 'text-yellow-500'}`}>
-                            {post.status === 'published' ? 'Published' : 'Draft'}
-                        </span>
+                        <div className="flex items-center gap-3">
+                            <h2 className="text-lg font-semibold">{post?.title || 'New Post'}</h2>
+                            {isEditing && (
+                                <span className="flex items-center text-xs font-medium">
+                                    {saveState === 'saving' && <span className="flex items-center text-yellow-600 dark:text-yellow-500"><Loader2 className="mr-1 h-3 w-3 animate-spin"/> Saving...</span>}
+                                    {saveState === 'saved' && <span className="flex items-center text-green-600 dark:text-green-500"><CheckCircle2 className="mr-1 h-3 w-3"/> Saved</span>}
+                                    {saveState === 'unsaved' && <span className="text-muted-foreground">Unsaved changes</span>}
+                                    {saveState === 'failed' && <span className="text-destructive">Save failed</span>}
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2 mt-0.5">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${form.watch('status') === 'published' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'}`}>
+                                {form.watch('status') === 'published' ? 'Published' : 'Draft'}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button type="button" variant="outline" onClick={handleExternalPreview}>
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        Preview Page
-                    </Button>
-                    <Button type="button" variant="outline" onClick={() => form.setValue('status', form.getValues('status') === 'published' ? 'draft' : 'published')}>
-                        {form.watch('status') === 'published' ? 'Unpublish' : 'Publish'}
-                    </Button>
-                    <Button type="submit" disabled={isPending}>
-                        {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                        Save
-                    </Button>
+                    {isEditing && (
+                        <Button type="button" variant="outline" size="sm" onClick={handleExternalPreview}>
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Preview
+                        </Button>
+                    )}
+                    
+                    {isEditing ? (
+                        form.watch('status') === 'draft' ? (
+                            <Button type="button" size="sm" onClick={() => {
+                                form.setValue('status', 'published', { shouldDirty: true })
+                                form.handleSubmit(onSubmit)()
+                            }} disabled={isPending || saveState === 'saving'}>
+                                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Publish
+                            </Button>
+                        ) : (
+                            <Button type="button" size="sm" onClick={() => {
+                                form.handleSubmit(onSubmit)()
+                            }} disabled={isPending || saveState === 'saved' || saveState === 'idle'}>
+                                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Update
+                            </Button>
+                        )
+                    ) : (
+                        <Button type="submit" size="sm" disabled={isPending}>
+                            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                            Create Draft
+                        </Button>
+                    )}
                 </div>
             </div>
 
