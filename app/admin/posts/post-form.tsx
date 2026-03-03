@@ -5,7 +5,7 @@ import { useTransition, useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { postSchema, type PostFormValues } from './schema'
-import { createPost, updatePost } from './actions'
+import { createBlogPost, updatePost } from './actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -72,8 +72,8 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
                     setSaveState('saved')
                     toast.success('Post updated')
                 } else {
-                    await createPost(formattedData)
-                    toast.success('Post created')
+                    // Should not happen - new posts are created via actions.ts before navigating to edit page
+                    toast.error('Invalid state: post not found')
                 }
                 router.refresh()
             } catch (error) {
