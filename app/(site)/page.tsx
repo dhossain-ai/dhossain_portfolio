@@ -7,7 +7,7 @@ export const revalidate = 60;
 
 export default async function HomePage() {
   const projects = await getPublishedProjects();
-  const featuredProjects = projects.filter((project) => project.featured).slice(0, 3);
+  const featuredProjects = projects.filter((project) => project.featured).slice(0, 4);
 
   return <HomeContent featuredProjects={featuredProjects} />;
 }
