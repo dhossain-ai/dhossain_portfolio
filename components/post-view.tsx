@@ -49,13 +49,13 @@ export async function PostView({ post, backHref, backLabel }: PostViewProps) {
         author: {
             '@type': 'Person',
             name: 'Shahadat Hossain',
-            url: 'https://dhossian.com'
+            url: 'https://dhossain.com'
         },
         image: post.cover_image || undefined,
         keywords: post.tags?.join(', '),
         mainEntityOfPage: {
             '@type': 'WebPage',
-            '@id': `https://dhossian.com/${post.type === 'journal' ? 'journal' : 'blog'}/${post.slug}`
+            '@id': `https://dhossain.com/${post.type === 'journal' ? 'journal' : 'blog'}/${post.slug}`
         }
     }
 

@@ -66,8 +66,8 @@ export function ContactForm() {
           <ContactDetail
             icon={Mail}
             title="Email"
-            description="hello@dhossian.com"
-            href="mailto:hello@dhossian.com"
+            description="hello@dhossain.com"
+            href="mailto:hello@dhossain.com"
           />
           <ContactDetail
             icon={Building2}

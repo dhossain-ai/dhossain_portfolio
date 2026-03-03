@@ -14,7 +14,7 @@ export default function AboutPage() {
     "@type": "Person",
     name: "Shahadat Hossain",
     jobTitle: ["Applied AI student", "Full-stack developer"],
-    url: "https://dhossian.com/about",
+    url: "https://dhossain.com/about",
     sameAs: [
       "https://github.com/Shahadat99x",
       "https://linkedin.com/in/shahadat-ai",
