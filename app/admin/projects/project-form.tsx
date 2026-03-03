@@ -159,6 +159,18 @@ export function ProjectForm({ project }: ProjectFormProps) {
         }
     }, [watchedValues, isEditing, initialLoad, project])
 
+    // Unsaved changes leave warning
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (saveState === 'unsaved' || saveState === 'saving') {
+                e.preventDefault()
+                e.returnValue = ''
+            }
+        }
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+    }, [saveState])
+
     const handleSlugGenerate = () => {
         const title = form.getValues('title')
         if (title) {
