@@ -11,8 +11,8 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className="flex-1">
-        <div className="mx-auto w-full max-w-content-xl px-4 py-16 pt-24 sm:px-6 lg:px-8">
+      <main className="flex-1 print:p-0">
+        <div className="mx-auto w-full max-w-content-xl px-4 py-16 pt-24 sm:px-6 lg:px-8 print:py-0 print:pt-0">
           {children}
         </div>
       </main>

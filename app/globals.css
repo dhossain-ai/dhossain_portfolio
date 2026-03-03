@@ -78,6 +78,78 @@ html {
   color: inherit !important;
 }
 
+@media print {
+  /* Hide navigation and footer for print */
+  nav, header nav, footer, .navbar, .footer {
+    display: none !important;
+  }
+
+  /* Remove padding from main content area */
+  main, .main-content {
+    padding-top: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Remove shadows and backgrounds */
+  .shadow-soft, .shadow-md, .shadow-sm, [class*="shadow"] {
+    box-shadow: none !important;
+  }
+
+  /* Remove decorative backgrounds */
+  [class*="bg-"][class*="/"],
+  [class*="bg-gradient"],
+  [class*="backdrop-blur"] {
+    background: none !important;
+    background-color: transparent !important;
+  }
+
+  /* Remove borders that look like dividers */
+  .border-dashed, .border-dotted {
+    border-style: solid !important;
+  }
+
+  /* Reduce spacing for print */
+  .space-y-12 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse))) !important;
+    margin-bottom: calc(1rem * var(--tw-space-y-reverse)) !important;
+  }
+
+  .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse))) !important;
+    margin-bottom: calc(0.75rem * var(--tw-space-y-reverse)) !important;
+  }
+
+  /* Hide action buttons in print */
+  .no-print, button, .print\:hidden {
+    display: none !important;
+  }
+
+  /* Ensure links show URL in print */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  /* Keep essential elements visible */
+  .print\:visible {
+    display: block !important;
+  }
+
+  /* Page break control */
+  .break-inside-avoid {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
