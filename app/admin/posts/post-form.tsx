@@ -1,22 +1,22 @@
 
 'use client'
 
-import { useTransition, useState } from 'react'
+import { useTransition, useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { postSchema, type PostFormValues } from './schema'
-import { updatePost } from './actions'
+import { createBlogPost, updatePost } from './actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
-import { ArrowLeft, Save, Loader2, ImageIcon, X, ExternalLink } from 'lucide-react'
+import { Loader2, ImageIcon, X } from 'lucide-react'
 import { Post } from '@/lib/blog'
 import { EditorToolbar } from './editor-toolbar'
+import { EditorActions, EditorHeader } from '@/components/admin/editor'
 import { CldUploadWidget } from 'next-cloudinary'
 import Image from 'next/image'
 
@@ -29,6 +29,12 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
     const router = useRouter()
     const [isPending, startTransition] = useTransition()
     const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit')
+    
+    const isEditing = !!post?.id
+
+    const [saveState, setSaveState] = useState<'idle' | 'unsaved' | 'saving' | 'saved' | 'failed'>('idle')
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const [initialLoad, setInitialLoad] = useState(true)
 
     const form = useForm({
         resolver: zodResolver(postSchema),
@@ -52,21 +58,79 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
     const contentMarkdown = form.watch('content_markdown')
 
     const onSubmit = (values: PostFormValues) => {
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
         startTransition(async () => {
             try {
                 const formattedData = {
                     ...values,
                     tags: values.tags ? values.tags.split(',').map(t => t.trim()).filter(Boolean) : []
                 }
-                await updatePost(post.id, formattedData)
-                toast.success('Post saved')
+                
+                if (isEditing && post?.id) {
+                    setSaveState('saving')
+                    await updatePost(post.id, formattedData)
+                    setSaveState('saved')
+                    toast.success('Post updated')
+                } else {
+                    // Should not happen - new posts are created via actions.ts before navigating to edit page
+                    toast.error('Invalid state: post not found')
+                }
                 router.refresh()
             } catch (error) {
                 console.error(error)
+                setSaveState('failed')
                 toast.error('Failed to save post')
             }
         })
     }
+
+    // Clear initial load flag
+    useEffect(() => { setInitialLoad(false) }, [])
+
+    // Auto-save effect
+    const watchedValues = form.watch()
+    useEffect(() => {
+        if (initialLoad) return
+        if (!isEditing) return
+
+        setSaveState('unsaved')
+        
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current)
+        }
+
+        typingTimeoutRef.current = setTimeout(async () => {
+            setSaveState('saving')
+            try {
+                const values = form.getValues() as PostFormValues
+                const formattedData = {
+                    ...values,
+                    tags: values.tags ? values.tags.split(',').map(t => t.trim()).filter(Boolean) : []
+                }
+                await updatePost(post!.id!, formattedData)
+                setSaveState('saved')
+            } catch (error) {
+                console.error('Autosave error', error)
+                setSaveState('failed')
+            }
+        }, 1500)
+
+        return () => {
+            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+        }
+    }, [watchedValues, isEditing, initialLoad, post])
+
+    // Unsaved changes leave warning
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (saveState === 'unsaved' || saveState === 'saving') {
+                e.preventDefault()
+                e.returnValue = ''
+            }
+        }
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+    }, [saveState])
 
     const handleSlugGenerate = () => {
         const title = form.getValues('title')
@@ -120,34 +184,30 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <input type="hidden" {...form.register('type')} />
-            <div className="flex items-center justify-between sticky top-0 z-10 bg-background/95 backdrop-blur py-4 border-b">
-                <div className="flex items-center gap-4">
-                    <Link href={isJournal ? "/admin/journal" : "/admin/posts"}>
-                        <Button variant="ghost" size="icon">
-                            <ArrowLeft className="h-4 w-4" />
-                        </Button>
-                    </Link>
-                    <div className="flex flex-col">
-                        <h2 className="text-lg font-semibold">{post.title || 'Untitled Post'}</h2>
-                        <span className={`text-xs ${post.status === 'published' ? 'text-green-500' : 'text-yellow-500'}`}>
-                            {post.status === 'published' ? 'Published' : 'Draft'}
-                        </span>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Button type="button" variant="outline" onClick={handleExternalPreview}>
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        Preview Page
-                    </Button>
-                    <Button type="button" variant="outline" onClick={() => form.setValue('status', form.getValues('status') === 'published' ? 'draft' : 'published')}>
-                        {form.watch('status') === 'published' ? 'Unpublish' : 'Publish'}
-                    </Button>
-                    <Button type="submit" disabled={isPending}>
-                        {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                        Save
-                    </Button>
-                </div>
-            </div>
+            
+            <EditorHeader
+                title={post?.title || 'New Post'}
+                isEditing={isEditing}
+                saveState={saveState}
+                status={form.watch('status') === 'published' ? 'published' : 'draft'}
+                backHref={isJournal ? "/admin/journal" : "/admin/posts"}
+                actions={
+                    <EditorActions
+                        isEditing={isEditing}
+                        isPending={isPending}
+                        saveState={saveState}
+                        status={form.watch('status') === 'published' ? 'published' : 'draft'}
+                        previewUrl={post?.id ? `/preview/post/${post.id}` : null}
+                        onPreview={handleExternalPreview}
+                        onPublish={() => {
+                            form.setValue('status', 'published', { shouldDirty: true })
+                            form.handleSubmit(onSubmit)()
+                        }}
+                        onUpdate={() => form.handleSubmit(onSubmit)()}
+                        onCreateDraft={() => form.handleSubmit(onSubmit)()}
+                    />
+                }
+            />
 
             <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
                 <div className="space-y-6">

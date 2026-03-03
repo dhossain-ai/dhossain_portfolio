@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useTransition } from 'react'
+import { useEffect, useState, useRef, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { projectSchema, type ProjectFormValues } from './schema'
@@ -13,11 +13,12 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Save, Loader2, ImageIcon, X, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Save, Loader2, ImageIcon, X } from 'lucide-react'
 import { CldUploadWidget } from 'next-cloudinary'
 import Image from 'next/image'
 import { ArrayInput } from '@/components/ui/array-input'
 import { Switch } from '@/components/ui/switch'
+import { EditorActions, EditorHeader } from '@/components/admin/editor'
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable'
 import { SortableGalleryItem } from './sortable-gallery-item'
@@ -62,6 +63,10 @@ export function ProjectForm({ project }: ProjectFormProps) {
     const [isPending, startTransition] = useTransition()
     const isEditing = !!project?.id
 
+    const [saveState, setSaveState] = useState<'idle' | 'unsaved' | 'saving' | 'saved' | 'failed'>('idle')
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const [initialLoad, setInitialLoad] = useState(true)
+
     const form = useForm({
         resolver: zodResolver(projectSchema),
         defaultValues: {
@@ -102,10 +107,13 @@ export function ProjectForm({ project }: ProjectFormProps) {
     })
 
     const onSubmit = (values: ProjectFormValues) => {
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
         startTransition(async () => {
             try {
                 if (isEditing && project?.id) {
+                    setSaveState('saving')
                     await updateProject(project.id, values)
+                    setSaveState('saved')
                     toast.success('Project updated')
                 } else {
                     await createProject(values)
@@ -114,10 +122,55 @@ export function ProjectForm({ project }: ProjectFormProps) {
                 router.refresh()
             } catch (error) {
                 console.error(error)
+                setSaveState('failed')
                 toast.error('Failed to save project')
             }
         })
     }
+
+    // Clear initial load flag
+    useEffect(() => { setInitialLoad(false) }, [])
+
+    // Auto-save effect
+    const watchedValues = form.watch()
+    useEffect(() => {
+        if (initialLoad) return
+        if (!isEditing) return
+
+        setSaveState('unsaved')
+        
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current)
+        }
+
+        typingTimeoutRef.current = setTimeout(async () => {
+            setSaveState('saving')
+            try {
+                const data = form.getValues() as ProjectFormValues
+                await updateProject(project!.id!, data)
+                setSaveState('saved')
+            } catch (error) {
+                console.error('Autosave error', error)
+                setSaveState('failed')
+            }
+        }, 1500)
+
+        return () => {
+            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+        }
+    }, [watchedValues, isEditing, initialLoad, project])
+
+    // Unsaved changes leave warning
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (saveState === 'unsaved' || saveState === 'saving') {
+                e.preventDefault()
+                e.returnValue = ''
+            }
+        }
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+    }, [saveState])
 
     const handleSlugGenerate = () => {
         const title = form.getValues('title')
@@ -166,38 +219,31 @@ export function ProjectForm({ project }: ProjectFormProps) {
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pb-20">
-            <div className="flex items-center justify-between sticky top-0 z-10 bg-background/95 backdrop-blur py-4 border-b">
-                <div className="flex items-center gap-4">
-                    <Link href="/admin/projects">
-                        <Button variant="ghost" size="icon">
-                            <ArrowLeft className="h-4 w-4" />
-                        </Button>
-                    </Link>
-                    <div className="flex flex-col">
-                        <h2 className="text-lg font-semibold">{project?.title || 'New Project'}</h2>
-                        <span className={`text-xs ${form.watch('status_public') === 'published' ? 'text-green-500' : 'text-yellow-500'}`}>
-                            {form.watch('status_public') === 'published' ? 'Published' : 'Draft'}
-                        </span>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    {isEditing && (
-                        <Button type="button" variant="outline" onClick={handleExternalPreview}>
-                            <ExternalLink className="mr-2 h-4 w-4" />
-                            Preview Page
-                        </Button>
-                    )}
-                    <Button type="button" variant="outline" onClick={() => form.setValue('status_public', form.getValues('status_public') === 'published' ? 'draft' : 'published')}>
-                        {form.watch('status_public') === 'published' ? 'Unpublish' : 'Publish'}
-                    </Button>
-                    <Button type="submit" disabled={isPending}>
-                        {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                        Save
-                    </Button>
-                </div>
-            </div>
+            <EditorHeader
+                title={project?.title || 'New Project'}
+                isEditing={isEditing}
+                saveState={saveState}
+                status={form.watch('status_public') === 'published' ? 'published' : 'draft'}
+                backHref="/admin/projects"
+                actions={
+                    <EditorActions
+                        isEditing={isEditing}
+                        isPending={isPending}
+                        saveState={saveState}
+                        status={form.watch('status_public') === 'published' ? 'published' : 'draft'}
+                        previewUrl={project?.id ? `/preview/project/${project.id}` : null}
+                        onPreview={handleExternalPreview}
+                        onPublish={() => {
+                            form.setValue('status_public', 'published', { shouldDirty: true })
+                            form.handleSubmit(onSubmit)()
+                        }}
+                        onUpdate={() => form.handleSubmit(onSubmit)()}
+                        onCreateDraft={() => form.handleSubmit(onSubmit)()}
+                    />
+                }
+            />
 
-            <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
+            <div className="grid gap-6 md:gap-8 md:grid-cols-[2fr_1fr]">
                 {/* Main Content Column */}
                 <div className="space-y-8">
                     {/* Basic Info */}
