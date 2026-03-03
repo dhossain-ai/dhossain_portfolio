@@ -50,7 +50,7 @@ export function CVContent() {
               </div>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Button variant="secondary" size="sm" className="rounded-full" disabled>
+              <Button variant="secondary" size="sm" className="rounded-full" onClick={() => window.print()}>
                 <Download className="h-4 w-4 mr-2" />
                 Download PDF
               </Button>
