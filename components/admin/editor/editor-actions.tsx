@@ -43,11 +43,11 @@ export function EditorActions({
     const canPublish = !isPending && !isSaving
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
             {previewUrl && (
                 <Button type="button" variant="outline" size="sm" onClick={onPreview}>
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Preview
+                    <ExternalLink className="mr-1.5 h-4 w-4" />
+                    <span className="hidden sm:inline">Preview</span>
                 </Button>
             )}
 
@@ -58,8 +58,9 @@ export function EditorActions({
                     onClick={onPublish}
                     disabled={canPublish ? false : true}
                 >
-                    {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Publish
+                    {isPending && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
+                    <span className="hidden sm:inline">Publish</span>
+                    <span className="sm:hidden">Pub</span>
                 </Button>
             ) : (
                 <Button
@@ -68,7 +69,7 @@ export function EditorActions({
                     onClick={onUpdate}
                     disabled={isPending || saveState === 'saved' || saveState === 'idle'}
                 >
-                    {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {isPending && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
                     Update
                 </Button>
             )}

@@ -225,27 +225,25 @@ export function ProjectForm({ project }: ProjectFormProps) {
                 saveState={saveState}
                 status={form.watch('status_public') === 'published' ? 'published' : 'draft'}
                 backHref="/admin/projects"
-            >
-            </EditorHeader>
+                actions={
+                    <EditorActions
+                        isEditing={isEditing}
+                        isPending={isPending}
+                        saveState={saveState}
+                        status={form.watch('status_public') === 'published' ? 'published' : 'draft'}
+                        previewUrl={project?.id ? `/preview/project/${project.id}` : null}
+                        onPreview={handleExternalPreview}
+                        onPublish={() => {
+                            form.setValue('status_public', 'published', { shouldDirty: true })
+                            form.handleSubmit(onSubmit)()
+                        }}
+                        onUpdate={() => form.handleSubmit(onSubmit)()}
+                        onCreateDraft={() => form.handleSubmit(onSubmit)()}
+                    />
+                }
+            />
 
-            <div className="flex justify-end">
-                <EditorActions
-                    isEditing={isEditing}
-                    isPending={isPending}
-                    saveState={saveState}
-                    status={form.watch('status_public') === 'published' ? 'published' : 'draft'}
-                    previewUrl={project?.id ? `/preview/project/${project.id}` : null}
-                    onPreview={handleExternalPreview}
-                    onPublish={() => {
-                        form.setValue('status_public', 'published', { shouldDirty: true })
-                        form.handleSubmit(onSubmit)()
-                    }}
-                    onUpdate={() => form.handleSubmit(onSubmit)()}
-                    onCreateDraft={() => form.handleSubmit(onSubmit)()}
-                />
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
+            <div className="grid gap-6 md:gap-8 md:grid-cols-[2fr_1fr]">
                 {/* Main Content Column */}
                 <div className="space-y-8">
                     {/* Basic Info */}

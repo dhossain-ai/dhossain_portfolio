@@ -13,6 +13,7 @@ interface EditorHeaderProps {
     status: 'draft' | 'published'
     backHref: string
     children?: React.ReactNode
+    actions?: React.ReactNode
 }
 
 export function EditorHeader({
@@ -22,18 +23,19 @@ export function EditorHeader({
     status,
     backHref,
     children,
+    actions,
 }: EditorHeaderProps) {
     return (
-        <div className="flex items-center justify-between sticky top-0 z-10 bg-background/95 backdrop-blur py-4 border-b">
-            <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sticky top-0 z-10 bg-background/95 backdrop-blur py-3 sm:py-4 border-b">
+            <div className="flex items-center gap-3 sm:gap-4">
                 <Link href={backHref}>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-9 sm:w-9">
                         <ArrowLeft className="h-4 w-4" />
                     </Button>
                 </Link>
-                <div className="flex flex-col">
-                    <div className="flex items-center gap-3">
-                        <h2 className="text-lg font-semibold">{title}</h2>
+                <div className="flex flex-col min-w-0">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <h2 className="text-base sm:text-lg font-semibold truncate max-w-[150px] sm:max-w-none">{title}</h2>
                         {isEditing && <SaveStateIndicator state={saveState} />}
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
@@ -42,6 +44,7 @@ export function EditorHeader({
                     </div>
                 </div>
             </div>
+            {actions && <div className="flex justify-end sm:ml-4">{actions}</div>}
         </div>
     )
 }

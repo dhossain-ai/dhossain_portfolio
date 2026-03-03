@@ -191,25 +191,23 @@ export function PostForm({ post, isJournal = false }: PostFormProps) {
                 saveState={saveState}
                 status={form.watch('status') === 'published' ? 'published' : 'draft'}
                 backHref={isJournal ? "/admin/journal" : "/admin/posts"}
-            >
-            </EditorHeader>
-
-            <div className="flex justify-end">
-                <EditorActions
-                    isEditing={isEditing}
-                    isPending={isPending}
-                    saveState={saveState}
-                    status={form.watch('status') === 'published' ? 'published' : 'draft'}
-                    previewUrl={post?.id ? `/preview/post/${post.id}` : null}
-                    onPreview={handleExternalPreview}
-                    onPublish={() => {
-                        form.setValue('status', 'published', { shouldDirty: true })
-                        form.handleSubmit(onSubmit)()
-                    }}
-                    onUpdate={() => form.handleSubmit(onSubmit)()}
-                    onCreateDraft={() => form.handleSubmit(onSubmit)()}
-                />
-            </div>
+                actions={
+                    <EditorActions
+                        isEditing={isEditing}
+                        isPending={isPending}
+                        saveState={saveState}
+                        status={form.watch('status') === 'published' ? 'published' : 'draft'}
+                        previewUrl={post?.id ? `/preview/post/${post.id}` : null}
+                        onPreview={handleExternalPreview}
+                        onPublish={() => {
+                            form.setValue('status', 'published', { shouldDirty: true })
+                            form.handleSubmit(onSubmit)()
+                        }}
+                        onUpdate={() => form.handleSubmit(onSubmit)()}
+                        onCreateDraft={() => form.handleSubmit(onSubmit)()}
+                    />
+                }
+            />
 
             <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
                 <div className="space-y-6">
