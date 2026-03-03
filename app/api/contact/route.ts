@@ -10,7 +10,7 @@ const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 const CONTACT_TO = process.env.CONTACT_EMAIL ?? siteConfig.email;
 const CONTACT_FROM =
-  process.env.RESEND_FROM_EMAIL ?? `Portfolio Bot <hello@dhossian.com>`;
+  process.env.RESEND_FROM_EMAIL ?? `Portfolio Bot <hello@dhossain.com>`;
 
 export async function POST(request: Request) {
   const identifier = getClientIdentifier(request);

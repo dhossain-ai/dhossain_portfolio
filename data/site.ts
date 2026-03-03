@@ -17,13 +17,13 @@ export type SocialLink = {
 
 export const siteConfig = {
   name: "Shahadat Hossain",
-  title: "AI & Data Science Explorer",
+  title: "Full-Stack Builder with AI Focus",
   tagline: "I build full-stack web platforms and Android apps.",
   description:
-    "Shahadat Hossain is an AI & Data Science Explorer based in Vilnius, Lithuania, building full-stack web platforms and Android apps.",
+    "Shahadat Hossain is a Full-Stack Developer based in Vilnius, Lithuania, building full-stack web platforms and Android apps.",
   location: "Vilnius, Lithuania",
-  email: "hello@dhossian.com",
-  url: "https://dhossian.com",
+  email: "hello@dhossain.com",
+  url: "https://dhossain.com",
   ogImage: "/api/og",
 };
 
