@@ -134,8 +134,8 @@ export function HomeContent({ featuredProjects }: HomeContentProps) {
       <section id="projects" className="space-y-8">
         <SectionHeader
           eyebrow="Selected work"
-          title="Recent projects"
-          description="A selection of the full-stack web platforms and mobile apps I have shipped recently."
+          title="Featured Projects"
+          description="A curated selection of my best full-stack web platforms and mobile apps. Explore the full archive for more."
         />
         <div className="grid gap-6 md:grid-cols-2">
           {featuredProjects.map((project) => (
