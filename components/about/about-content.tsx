@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, Target, Globe, Code2, Mail, Github, Linkedin } from "lucide-react";
+import { GraduationCap, Target, Globe, Code2, Mail, Github, Linkedin, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { SectionHeader } from "@/components/section-header";
@@ -124,6 +124,12 @@ export function AboutContent() {
                 </Link>
               </Button>
             </div>
+            <Button asChild variant="outline" className="w-full rounded-xl">
+              <Link href="/cv">
+                <FileText className="h-4 w-4 mr-2" />
+                Resume / CV
+              </Link>
+            </Button>
           </div>
         </motion.div>
       </section>
