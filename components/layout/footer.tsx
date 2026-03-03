@@ -24,7 +24,7 @@ const iconMap = {
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/70 bg-background/80">
+    <footer className="border-t border-border/70 bg-background/80 print:hidden">
       <div className="mx-auto flex w-full max-w-content-xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
         <div className="space-y-2">
           <p className="text-sm font-semibold text-foreground">

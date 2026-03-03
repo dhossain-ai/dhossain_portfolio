@@ -22,7 +22,7 @@ export function Navbar() {
 
   return (
     <>
-      <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+      <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 print:hidden">
         <div className="relative flex w-full max-w-5xl items-center justify-between rounded-full border border-border/40 bg-background/60 p-2 pl-4 pr-2 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-border/60 hover:shadow-xl dark:bg-zinc-900/60">
 
           {/* Logo Section */}
