@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useTransition } from 'react'
+import { useEffect, useState, useRef, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { projectSchema, type ProjectFormValues } from './schema'
@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Save, Loader2, ImageIcon, X, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Save, Loader2, ImageIcon, X, ExternalLink, CheckCircle2 } from 'lucide-react'
 import { CldUploadWidget } from 'next-cloudinary'
 import Image from 'next/image'
 import { ArrayInput } from '@/components/ui/array-input'
@@ -62,6 +62,10 @@ export function ProjectForm({ project }: ProjectFormProps) {
     const [isPending, startTransition] = useTransition()
     const isEditing = !!project?.id
 
+    const [saveState, setSaveState] = useState<'idle' | 'unsaved' | 'saving' | 'saved' | 'failed'>('idle')
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const [initialLoad, setInitialLoad] = useState(true)
+
     const form = useForm({
         resolver: zodResolver(projectSchema),
         defaultValues: {
@@ -102,10 +106,13 @@ export function ProjectForm({ project }: ProjectFormProps) {
     })
 
     const onSubmit = (values: ProjectFormValues) => {
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
         startTransition(async () => {
             try {
                 if (isEditing && project?.id) {
+                    setSaveState('saving')
                     await updateProject(project.id, values)
+                    setSaveState('saved')
                     toast.success('Project updated')
                 } else {
                     await createProject(values)
@@ -114,10 +121,43 @@ export function ProjectForm({ project }: ProjectFormProps) {
                 router.refresh()
             } catch (error) {
                 console.error(error)
+                setSaveState('failed')
                 toast.error('Failed to save project')
             }
         })
     }
+
+    // Clear initial load flag
+    useEffect(() => { setInitialLoad(false) }, [])
+
+    // Auto-save effect
+    const watchedValues = form.watch()
+    useEffect(() => {
+        if (initialLoad) return
+        if (!isEditing) return
+
+        setSaveState('unsaved')
+        
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current)
+        }
+
+        typingTimeoutRef.current = setTimeout(async () => {
+            setSaveState('saving')
+            try {
+                const data = form.getValues() as ProjectFormValues
+                await updateProject(project!.id!, data)
+                setSaveState('saved')
+            } catch (error) {
+                console.error('Autosave error', error)
+                setSaveState('failed')
+            }
+        }, 1500)
+
+        return () => {
+            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+        }
+    }, [watchedValues, isEditing, initialLoad, project])
 
     const handleSlugGenerate = () => {
         const title = form.getValues('title')
@@ -174,26 +214,55 @@ export function ProjectForm({ project }: ProjectFormProps) {
                         </Button>
                     </Link>
                     <div className="flex flex-col">
-                        <h2 className="text-lg font-semibold">{project?.title || 'New Project'}</h2>
-                        <span className={`text-xs ${form.watch('status_public') === 'published' ? 'text-green-500' : 'text-yellow-500'}`}>
-                            {form.watch('status_public') === 'published' ? 'Published' : 'Draft'}
-                        </span>
+                        <div className="flex items-center gap-3">
+                            <h2 className="text-lg font-semibold">{project?.title || 'New Project'}</h2>
+                            {isEditing && (
+                                <span className="flex items-center text-xs font-medium">
+                                    {saveState === 'saving' && <span className="flex items-center text-yellow-600 dark:text-yellow-500"><Loader2 className="mr-1 h-3 w-3 animate-spin"/> Saving...</span>}
+                                    {saveState === 'saved' && <span className="flex items-center text-green-600 dark:text-green-500"><CheckCircle2 className="mr-1 h-3 w-3"/> Saved</span>}
+                                    {saveState === 'unsaved' && <span className="text-muted-foreground">Unsaved changes</span>}
+                                    {saveState === 'failed' && <span className="text-destructive">Save failed</span>}
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2 mt-0.5">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${form.watch('status_public') === 'published' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'}`}>
+                                {form.watch('status_public') === 'published' ? 'Published' : 'Draft'}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
                     {isEditing && (
-                        <Button type="button" variant="outline" onClick={handleExternalPreview}>
+                        <Button type="button" variant="outline" size="sm" onClick={handleExternalPreview}>
                             <ExternalLink className="mr-2 h-4 w-4" />
-                            Preview Page
+                            Preview
                         </Button>
                     )}
-                    <Button type="button" variant="outline" onClick={() => form.setValue('status_public', form.getValues('status_public') === 'published' ? 'draft' : 'published')}>
-                        {form.watch('status_public') === 'published' ? 'Unpublish' : 'Publish'}
-                    </Button>
-                    <Button type="submit" disabled={isPending}>
-                        {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                        Save
-                    </Button>
+                    
+                    {isEditing ? (
+                        form.watch('status_public') === 'draft' ? (
+                            <Button type="button" size="sm" onClick={() => {
+                                form.setValue('status_public', 'published', { shouldDirty: true })
+                                form.handleSubmit(onSubmit)()
+                            }} disabled={isPending || saveState === 'saving'}>
+                                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Publish
+                            </Button>
+                        ) : (
+                            <Button type="button" size="sm" onClick={() => {
+                                form.handleSubmit(onSubmit)()
+                            }} disabled={isPending || saveState === 'saved' || saveState === 'idle'}>
+                                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Update
+                            </Button>
+                        )
+                    ) : (
+                        <Button type="submit" size="sm" disabled={isPending}>
+                            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                            Create Draft
+                        </Button>
+                    )}
                 </div>
             </div>
 
