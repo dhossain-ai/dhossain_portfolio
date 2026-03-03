@@ -54,7 +54,7 @@ export function HomeContent({ featuredProjects }: HomeContentProps) {
             className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary backdrop-blur-md"
           >
             <Sparkles className="h-3.5 w-3.5" />
-            AI & Data Science Explorer
+            Full-Stack Builder with AI Focus
           </motion.div>
 
           {/* Main Headline */}

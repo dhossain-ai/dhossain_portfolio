@@ -23,20 +23,21 @@ function ProfileImage() {
   ];
 
   return (
-    <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
+    <div className="relative h-64 w-full overflow-hidden bg-muted">
       <Image
         src={src}
         alt={siteConfig.name}
         fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
         priority
+        sizes="(max-width: 768px) 100vw, 320px"
         onError={() => {
           if (attempts < fallbacks.length) {
             setSrc(fallbacks[attempts]);
             setAttempts(prev => prev + 1);
           }
         }}
-        unoptimized // Allow local file loading without strict optimization checks during dev/fallback
+        unoptimized
       />
     </div>
   );
@@ -95,43 +96,47 @@ export function AboutContent() {
         </div>
 
         {/* Profile Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="group sticky top-24 overflow-hidden rounded-3xl border border-border bg-card shadow-soft"
-        >
-          <ProfileImage />
-          <div className="p-6 space-y-4 bg-card/50 backdrop-blur-sm">
-            <div>
-              <h3 className="font-bold text-lg text-foreground">{siteConfig.name}</h3>
-              <p className="text-sm text-muted-foreground">{siteConfig.location}</p>
+        <div className="relative">
+          {/* Ambient glow */}
+          <div className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-primary/20 via-indigo-500/10 to-cyan-500/20 blur-2xl opacity-60 animate-pulse" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="group relative sticky top-24 overflow-hidden rounded-3xl border border-border bg-card shadow-soft"
+          >
+            <ProfileImage />
+            <div className="p-5 space-y-3 bg-card/50 backdrop-blur-sm">
+              <div>
+                <h3 className="font-bold text-lg text-foreground">{siteConfig.name}</h3>
+                <p className="text-sm text-muted-foreground">{siteConfig.location}</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Button asChild size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-muted">
+                  <Link href={socialLinks.find(l => l.platform === 'GitHub')?.href || '#'} target="_blank">
+                    <Github className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-muted">
+                  <Link href={socialLinks.find(l => l.platform === 'LinkedIn')?.href || '#'} target="_blank">
+                    <Linkedin className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-muted">
+                  <Link href={`mailto:${siteConfig.email}`}>
+                    <Mail className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+              <Button asChild variant="outline" className="w-full rounded-xl">
+                <Link href="/cv">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Resume / CV
+                </Link>
+              </Button>
             </div>
-            <div className="flex items-center gap-3">
-              <Button asChild size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-muted">
-                <Link href={socialLinks.find(l => l.platform === 'GitHub')?.href || '#'} target="_blank">
-                  <Github className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-muted">
-                <Link href={socialLinks.find(l => l.platform === 'LinkedIn')?.href || '#'} target="_blank">
-                  <Linkedin className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild size="icon" variant="ghost" className="h-8 w-8 rounded-full hover:bg-muted">
-                <Link href={`mailto:${siteConfig.email}`}>
-                  <Mail className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-            <Button asChild variant="outline" className="w-full rounded-xl">
-              <Link href="/cv">
-                <FileText className="h-4 w-4 mr-2" />
-                Resume / CV
-              </Link>
-            </Button>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Grid */}
