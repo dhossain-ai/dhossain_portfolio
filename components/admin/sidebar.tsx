@@ -4,7 +4,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { LayoutDashboard, FileText, Settings, LogOut } from 'lucide-react'
+import { LayoutDashboard, FileText, Settings, LogOut, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { signout } from '@/app/admin/actions'
 
@@ -13,6 +13,11 @@ const navItems = [
         title: 'Dashboard',
         href: '/admin',
         icon: LayoutDashboard,
+    },
+    {
+        title: 'Messages',
+        href: '/admin/messages',
+        icon: MessageCircle,
     },
     {
         title: 'Posts',
