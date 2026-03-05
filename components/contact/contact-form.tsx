@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ComponentType, type ReactNode } from "react";
+import { useState, useRef, type ComponentType, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2, Mail, MessageCircle, Rocket } from "lucide-react";
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { contactSchema, type ContactPayload } from "@/lib/validations/contact";
+import { Turnstile, type TurnstileRef } from "./turnstile";
 
 const defaultValues: ContactPayload = {
   name: "",
@@ -21,13 +22,28 @@ const defaultValues: ContactPayload = {
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileRef>(null);
   const form = useForm<ContactPayload>({
     resolver: zodResolver(contactSchema),
     defaultValues,
     mode: "onBlur",
   });
 
+  function handleTurnstileSuccess(token: string) {
+    setTurnstileToken(token);
+  }
+
+  function handleTurnstileError() {
+    setTurnstileToken(null);
+  }
+
   async function onSubmit(values: ContactPayload) {
+    if (!turnstileToken) {
+      toast.error("Please complete the verification.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const response = await fetch("/api/contact", {
@@ -35,7 +51,10 @@ export function ContactForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          turnstileToken,
+        }),
       });
 
       if (!response.ok) {
@@ -45,10 +64,21 @@ export function ContactForm() {
 
       toast.success("Message sent. Talk soon!");
       form.reset();
+      setTurnstileToken(null);
+      
+      // Reset Turnstile widget for next submission
+      if (turnstileRef.current) {
+        turnstileRef.current.reset();
+      }
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Unable to send message right now.",
       );
+      // Reset token on error so user can try again
+      setTurnstileToken(null);
+      if (turnstileRef.current) {
+        turnstileRef.current.reset();
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -77,7 +107,7 @@ export function ContactForm() {
           <ContactDetail
             icon={Rocket}
             title="Ideal projects"
-            description="Full-stack web platforms, admin dashboards, and Android apps. I’m also open to AI/ML experiments as I continue learning."
+            description="Full-stack web platforms, admin dashboards, and Android apps. I'm also open to AI/ML experiments as I continue learning."
           />
         </div>
       </div>
@@ -127,10 +157,23 @@ export function ContactForm() {
           <Input id="website" tabIndex={-1} autoComplete="off" {...form.register("website")} />
         </div>
 
+        <div className="space-y-2">
+          <Turnstile 
+            ref={turnstileRef}
+            onSuccess={handleTurnstileSuccess} 
+            onError={handleTurnstileError}
+          />
+          {!turnstileToken && !isSubmitting && (
+            <p className="text-sm text-muted-foreground">
+              Please complete the verification above to send your message.
+            </p>
+          )}
+        </div>
+
         <Button
           type="submit"
           size="lg"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !turnstileToken}
           className="w-full rounded-3xl"
         >
           <MessageCircle className="mr-2 h-4 w-4" />
