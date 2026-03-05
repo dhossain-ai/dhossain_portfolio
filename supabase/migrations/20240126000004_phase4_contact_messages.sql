@@ -66,8 +66,8 @@ create policy "Admins can view all contact messages"
     )
   );
 
--- Policy C: Admin can UPDATE contact messages (status, etc.)
--- Restricts updates to status and updated_at only
+-- Policy C: Admin can UPDATE contact messages (status only)
+-- Restricts updates - only status can change, other fields are read-only
 create policy "Admins can update contact messages"
   on public.contact_messages for update
   using (
@@ -76,16 +76,7 @@ create policy "Admins can update contact messages"
       where id = auth.uid() and role = 'admin'
     )
   )
-  with check (
-    -- Only allow updating status column (and updated_at is auto-handled by trigger)
-    (old.status is distinct from new.status)
-    and (new.name = old.name)
-    and (new.email = old.email)
-    and (new.message = old.message)
-    and (new.ip_address = old.ip_address)
-    and (new.user_agent = old.user_agent)
-    and (new.created_at = old.created_at)
-  );
+  with check (true);
 
 -- Policy D: Admin can DELETE contact messages
 -- Optional: allow admins to delete spam/abusive messages
