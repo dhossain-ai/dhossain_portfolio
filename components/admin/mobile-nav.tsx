@@ -4,13 +4,18 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { LayoutDashboard, FileText, Settings } from 'lucide-react'
+import { LayoutDashboard, FileText, Settings, MessageCircle } from 'lucide-react'
 
 const navItems = [
     {
         title: 'Dashboard',
         href: '/admin',
         icon: LayoutDashboard,
+    },
+    {
+        title: 'Messages',
+        href: '/admin/messages',
+        icon: MessageCircle,
     },
     {
         title: 'Posts',
