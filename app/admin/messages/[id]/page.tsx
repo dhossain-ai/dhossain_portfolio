@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getMessage, updateMessageStatus, type ContactMessageStatus } from '../actions'
-import { ArrowLeft, Mail, Calendar, Archive, Check, MailOpen, Reply } from 'lucide-react'
+import { ArrowLeft, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { StatusActions } from './status-actions'
+import { StatusActions, type IconName } from './status-actions'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -17,11 +17,11 @@ export default async function MessageDetailPage({ params }: Props) {
     notFound()
   }
 
-  const statusOptions: { value: ContactMessageStatus; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-    { value: 'unread', label: 'Mark Unread', icon: Mail },
-    { value: 'read', label: 'Mark Read', icon: MailOpen },
-    { value: 'replied', label: 'Mark Replied', icon: Reply },
-    { value: 'archived', label: 'Archive', icon: Archive },
+  const statusOptions: { value: ContactMessageStatus; label: string; iconName: IconName }[] = [
+    { value: 'unread', label: 'Mark Unread', iconName: 'mail' },
+    { value: 'read', label: 'Mark Read', iconName: 'mail-open' },
+    { value: 'replied', label: 'Mark Replied', iconName: 'reply' },
+    { value: 'archived', label: 'Archive', iconName: 'archive' },
   ]
 
   return (
@@ -80,7 +80,7 @@ export default async function MessageDetailPage({ params }: Props) {
                   currentStatus={message.status}
                   status={option.value}
                   label={option.label}
-                  icon={option.icon}
+                  iconName={option.iconName}
                 />
               ))}
             </div>
