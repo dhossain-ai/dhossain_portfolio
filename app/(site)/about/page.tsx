@@ -16,16 +16,24 @@ export default function AboutPage() {
     jobTitle: ["Applied AI student", "Full-stack developer"],
     url: "https://dhossain.com/about",
     sameAs: [
-      "https://github.com/Shahadat99x",
+      "https://github.com/dhossain-ai",
       "https://linkedin.com/in/shahadat-ai",
-      "https://x.com/shahadat_ai"
+      "https://x.com/shahadat_ai",
     ],
     address: {
       "@type": "PostalAddress",
       addressLocality: "Vilnius",
-      addressCountry: "Lithuania"
+      addressCountry: "Lithuania",
     },
-    knowsAbout: ["Next.js", "TypeScript", "Supabase", "Flutter", "Tailwind CSS", "AI/ML", "Computer Vision"]
+    knowsAbout: [
+      "Next.js",
+      "TypeScript",
+      "Supabase",
+      "Flutter",
+      "Tailwind CSS",
+      "AI/ML",
+      "Computer Vision",
+    ],
   };
 
   return (

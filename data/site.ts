@@ -37,7 +37,7 @@ export const navigation: NavItem[] = [
 ];
 
 export const socialLinks: SocialLink[] = [
-  { platform: "GitHub", href: "https://github.com/Shahadat99x" },
+  { platform: "GitHub", href: "https://github.com/dhossain-ai" },
   { platform: "LinkedIn", href: "https://linkedin.com/in/shahadat-ai" },
   { platform: "X", href: "https://x.com/shahadat_ai" },
   { platform: "Instagram", href: "https://www.instagram.com/shahadathossainverified/" },
